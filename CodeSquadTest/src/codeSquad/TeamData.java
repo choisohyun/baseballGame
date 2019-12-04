@@ -9,6 +9,7 @@
 package codeSquad;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -17,7 +18,7 @@ import java.util.stream.IntStream;
 
 public class TeamData extends BaseBallGame {
 	static Scanner sc = new Scanner(System.in);
-	static Map<String, List<String>> data = new HashMap<>();
+	static Map<String, List<String>> data = new LinkedHashMap<>();
 
 	public static void main(String[] args) {
 		start();
@@ -58,14 +59,14 @@ public class TeamData extends BaseBallGame {
 	}
 	
 	public static void outData() {
-		data.entrySet().forEach(entry->{
-			System.out.println(entry.getKey() + " 팀 정보");
-			List<String> value = entry.getValue();
+		for (String key : data.keySet()) {
+			System.out.println(key + " 팀 정보");
+			List<String> value = data.get(key);
 		    for (String val : value) {
 		    	System.out.println(value.indexOf(val)+1 + "번 " + val);
 		    }
 		    System.out.println();
-		});
+		}
 		System.out.print("\n\n");
 		start();
 	}
@@ -73,7 +74,7 @@ public class TeamData extends BaseBallGame {
 	public static void startGame() {
 		Object team1 = data.keySet().toArray()[0];
 		Object team2 = data.keySet().toArray()[1];
-		
+		int[] score = new int[2];
 		System.out.print(team1 + " VS "
 				+ team2 + "의 시합을 시작합니다.\n\n");
 		
@@ -83,7 +84,7 @@ public class TeamData extends BaseBallGame {
 			System.out.println(i + "회말 " + team2 + "의 공격");
 			attack(team2);
 		}
-		
+		last(score);
 	}
 	
 	public static void attack(Object obj) {
@@ -96,7 +97,6 @@ public class TeamData extends BaseBallGame {
 	}
 
 	public static void batting(Double num) {
-		int[] score = new int[2];
 		Double[] per = percentage(num);
 		Double rand = new Random().nextDouble();
 		Double start = 0.0, end = 0.0;
@@ -110,7 +110,8 @@ public class TeamData extends BaseBallGame {
 	      		break;
 	      	}
 		}
-		BaseBallGame.sbo(result);
+		System.out.println(randList[result]);
+		sbo(result);
 	}
 	
 	public static Double[] percentage(Double h) {
@@ -123,5 +124,68 @@ public class TeamData extends BaseBallGame {
 		return per;
 	}
 	
-//	public static void 
+	public static void sbo(int num) {
+		
+		Map<String, Integer> stateSBO = new HashMap<>();
+
+		if (num == 0)	// 스트라이크
+			strike(num);
+		else if (num == 1)  // 볼
+			ball(num);
+		else if (num == 2)  // 안타
+			anta();
+		else if (num == 3)  // 아웃
+			out(stateSBO);
+		stateSBO.put("S", state[0]);
+		stateSBO.put("B", state[1]);
+		stateSBO.put("O", state[2]);
+		
+		result(stateSBO);
+	}
+	
+	public static void strike(int num) {
+		state[num]++;
+		if (state[num] == 3) { // 아웃
+			state[2]++;
+			state[num] = 0;
+			System.out.print("\n" + randList[3] + MESSAGE_NEXT);
+		}
+	}
+	
+	public static void ball(int num) {
+		state[num]++;
+		if (state[num] == 4) { // 스트라이크
+			state[0]++;
+			state[num] = 0;
+			System.out.print(MESSAGE_NEXT);
+		}
+	}
+	
+	public static void anta() {
+		state[0] = 0;
+		state[1] = 0;
+		countAnta++;
+		System.out.print(MESSAGE_NEXT);
+	}
+	
+	public static void out(Map<String, Integer> stateSBO) {
+		state[0] = 0;
+		state[1] = 0;
+		state[2]++;
+		if (state[2] == 3) { // 종료
+			state[2] = 0;
+			
+		}
+		else {
+			System.out.print(MESSAGE_NEXT);
+		}
+	}
+	
+	public static void last(int[] score) {
+		System.out.println("경기 종료\n");
+		System.out.println(data.keySet().toArray()[0] 
+				+ " VS " + data.keySet().toArray()[1]);
+		System.out.println(score[0] + " : " + score[1]);
+		System.out.println("Thank you!");
+	}
 }
