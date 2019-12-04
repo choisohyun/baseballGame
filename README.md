@@ -1,4 +1,6 @@
 # 코드스쿼드 온라인 테스트
+* [[step-1 Branch File 바로보기](https://github.com/choisohyun/baseballGame/blob/step-1/CodeSquadTest/src/codeSquad/BaseBallGame.java)]
+* [[step-2 Branch File 바로보기](https://github.com/choisohyun/baseballGame/blob/step-2/CodeSquadTest/src/codeSquad/TeamData.java)]
 ## step-1 : BaseBallGame.java
  - 간단 야구 게임 구현하기
 ### 함수 설명  
