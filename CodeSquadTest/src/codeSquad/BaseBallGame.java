@@ -68,7 +68,7 @@ public class BaseBallGame {
 				stateSBO.put("B", state[1]);
 				stateSBO.put("O", state[2]);
 				result(stateSBO);
-				action();
+				last(countAnta);
 			}
 			else {
 				System.out.print(MESSAGE_NEXT);
@@ -79,10 +79,6 @@ public class BaseBallGame {
 		stateSBO.put("O", state[2]);
 		
 		result(stateSBO);
-	}
-	
-	public static void action() {
-		last(countAnta);
 	}
 
 	public static void result(Map<String, Integer> stateSBO) {
